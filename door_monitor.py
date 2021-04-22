@@ -96,13 +96,13 @@ def drawAngle(angleDraw):
 	elif angleDraw < 3*angleInterval:	# Open 12.5%-25% of maximum
 		draw(0, 1, 4, 7, white)
 		draw(2, 7, 4, 7, black)
-	elif angleDraw < 5*angleInterval:	# Open 25%-37.5% of maximum
+	elif angleDraw < 4*angleInterval:	# Open 25%-37.5% of maximum
 		draw(0, 2, 4, 7, white)
 		draw(3, 7, 4, 7, black)
-	elif angleDraw < 6*angleInterval:	# Open 37.5%-50% of maximum
+	elif angleDraw < 5*angleInterval:	# Open 37.5%-50% of maximum
 		draw(0, 3, 4, 7, white)
 		draw(4, 7, 4, 7, black)
-	elif angleDraw < 2*angleInterval:	# Open 50%-62.5% of maximum
+	elif angleDraw < 6*angleInterval:	# Open 50%-62.5% of maximum
 		draw(0, 4, 4, 7, white)
 		draw(5, 7, 4, 7, black)
 	elif angleDraw < 7*angleInterval:	# Open 62.5%-75% of maximum
