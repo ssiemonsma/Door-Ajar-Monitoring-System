@@ -318,6 +318,7 @@ def update_open_status(pin):
 		global openingMaxAngle, openingTotalAngle
 
 		draw(0,7,0,3,g) # Green = closed
+		drawAngle(0)
 
 		send_angle_update(0)	# When door is closed, angle is assumed to be 0 degrees
 
