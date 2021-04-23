@@ -86,32 +86,32 @@ def draw(x1,x2,y1,y2,color):
 
 # Draws to the screen based on the given angle
 def drawAngle(angleDraw):
-	angleInterval = angleMax/8 			# Number of degrees needed to change the angle-LED bars
+	angleInterval = angleMax/9 			# Number of degrees needed to change the angle-LED bars
 
-	if angleDraw < angleInterval and angleDraw > -1*angleInterval:  # Open less than 12.5% of maximum (with room for up to 12.5% miscalibration)
+	if angleDraw < angleInterval and angleDraw > -1*angleInterval:  # Open less than 1/9 of maximum (with room for up to 11.1% miscalibration)
 		draw(0, 7, 4, 7, black)
-	elif angleDraw < 1*angleInterval:	# Open 12.5%-25% of maximum
+	elif angleDraw < 2*angleInterval:	# Open 1/9 to 2/9 of maximum
 		draw(0, 0, 4, 7, white)
 		draw(1, 7, 4, 7, black)
-	elif angleDraw < 2*angleInterval:	# Open 12.5%-25% of maximum
+	elif angleDraw < 3*angleInterval:	# Open 2/9 to 3/9 of maximum
 		draw(0, 1, 4, 7, white)
 		draw(2, 7, 4, 7, black)
-	elif angleDraw < 3*angleInterval:	# Open 25%-37.5% of maximum
+	elif angleDraw < 4*angleInterval:	# Open 3/9 to 4/9 of maximum
 		draw(0, 2, 4, 7, white)
 		draw(3, 7, 4, 7, black)
-	elif angleDraw < 4*angleInterval:	# Open 37.5%-50% of maximum
+	elif angleDraw < 5*angleInterval:	# Open 4/9 to 5/9 of maximum
 		draw(0, 3, 4, 7, white)
 		draw(4, 7, 4, 7, black)
-	elif angleDraw < 5*angleInterval:	# Open 50%-62.5% of maximum
+	elif angleDraw < 6*angleInterval:	# Open 5/9 to 6/9 of maximum
 		draw(0, 4, 4, 7, white)
 		draw(5, 7, 4, 7, black)
-	elif angleDraw < 6*angleInterval:	# Open 62.5%-75% of maximum
+	elif angleDraw < 7*angleInterval:	# Open 6/9 to 7/9 of maximum
 		draw(0, 5, 4, 7, white)
 		draw(6, 7, 4, 7, black)
-	elif angleDraw < 7*angleInterval: 	# Open 75%-87.5% of maximum
+	elif angleDraw < 8*angleInterval: 	# Open 7/9 to 8/9 of maximum
 		draw(0, 6, 4, 7, white)
 		draw(7, 7, 4, 7, black)
-	elif angleDraw < 9*angleInterval:	# Open 87.5%-100% of maximum (with additional room for up to 12.5% of miscalibration)
+	elif angleDraw < 10*angleInterval:	# Open 8/9 to 100% of maximum (with additional room for up to 11.1% of miscalibration)
 		draw(0, 7, 4, 7, white)
 	else:
 		draw(0, 7, 4, 7, m)				# Error: Indicates recalibration required
