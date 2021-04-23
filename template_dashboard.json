@@ -2,8 +2,8 @@
  "meta": {
   "version": "1",
   "type": "dashboard",
-  "name": "Door Status (device_name)-Template",
-  "description": "template created from dashboard: Door Status (device_name)"
+  "name": "Door Status (device_name)",
+  "description": "template created for dashboard: Door Status (device_name)"
  },
  "content": {
   "data": {
@@ -65,7 +65,7 @@
      "x": 0,
      "y": 0,
      "w": 7,
-     "h": 4
+     "h": 3
     },
     "relationships": {
      "view": {
@@ -81,9 +81,9 @@
     "type": "cell",
     "attributes": {
      "x": 0,
-     "y": 4,
+     "y": 3,
      "w": 4,
-     "h": 4
+     "h": 3
     },
     "relationships": {
      "view": {
@@ -99,7 +99,7 @@
     "type": "cell",
     "attributes": {
      "x": 4,
-     "y": 6,
+     "y": 5,
      "w": 2,
      "h": 3
     },
@@ -117,7 +117,7 @@
     "type": "cell",
     "attributes": {
      "x": 9,
-     "y": 4,
+     "y": 3,
      "w": 3,
      "h": 3
     },
@@ -135,7 +135,7 @@
     "type": "cell",
     "attributes": {
      "x": 6,
-     "y": 4,
+     "y": 3,
      "w": 3,
      "h": 3
     },
@@ -153,7 +153,7 @@
     "type": "cell",
     "attributes": {
      "x": 6,
-     "y": 7,
+     "y": 6,
      "w": 3,
      "h": 3
     },
@@ -173,7 +173,7 @@
      "x": 7,
      "y": 0,
      "w": 5,
-     "h": 4
+     "h": 3
     },
     "relationships": {
      "view": {
@@ -189,7 +189,7 @@
     "type": "cell",
     "attributes": {
      "x": 4,
-     "y": 4,
+     "y": 3,
      "w": 2,
      "h": 2
     },
@@ -211,7 +211,7 @@
       "shape": "chronograf-v2",
       "queries": [
        {
-        "text": "from(bucket: \"Door_Data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"door_status\")\n  |> filter(fn: (r) => r[\"_field\"] == \"angle\")\n  |> aggregateWindow(every: 1s, fn: last, createEmpty: false)\n  |> yield(name: \"last\")",
+        "text": "from(bucket: \"Door_Data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"door_status\")\n  |> filter(fn: (r) => r[\"_field\"] == \"angle\")\n  |> filter(fn: (r) => r[\"device\"] == \"device_name\")\n  |> aggregateWindow(every: 5s, fn: mean, createEmpty: false)\n  |> yield(name: \"mean\")",
         "editMode": "advanced",
         "name": "",
         "builderConfig": {
@@ -311,12 +311,12 @@
     "type": "view",
     "id": "075821d3da630000",
     "attributes": {
-     "name": "Open/Closed",
+     "name": "Open/Closed (discrete readings)",
      "properties": {
       "shape": "chronograf-v2",
       "queries": [
        {
-        "text": "from(bucket: \"Door_Data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"door_status\")\n  |> filter(fn: (r) => r[\"_field\"] == \"open\")\n  |> filter(fn: (r) => r[\"device\"] == \"device_name\")\n  |> aggregateWindow(every: 1s, fn: mean, createEmpty: false)\n  |> yield(name: \"mean\")",
+        "text": "from(bucket: \"Door_Data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"door_status\")\n  |> filter(fn: (r) => r[\"_field\"] == \"open\")\n  |> filter(fn: (r) => r[\"device\"] == \"device_name\")\n  |> aggregateWindow(every: 1s, fn: last, createEmpty: false)\n  |> yield(name: \"last\")",
         "editMode": "advanced",
         "name": "",
         "builderConfig": {
@@ -357,10 +357,10 @@
          "",
          ""
         ],
-        "label": "",
+        "label": "closed                                                        open",
         "prefix": "",
         "suffix": "",
-        "base": "10",
+        "base": "2",
         "scale": "linear"
        }
       },
@@ -398,13 +398,15 @@
       "xTickStart": 0,
       "xTickStep": 0,
       "yColumn": "_value",
-      "generateYAxisTicks": [],
+      "generateYAxisTicks": [
+       "yTotalTicks"
+      ],
       "yTotalTicks": 0,
       "yTickStart": 0,
       "yTickStep": 0,
       "shadeBelow": false,
       "position": "overlaid",
-      "timeFormat": "",
+      "timeFormat": "HH:mm",
       "hoverDimension": "auto",
       "legendColorizeRows": true,
       "legendOpacity": 1,
@@ -416,13 +418,13 @@
     "type": "view",
     "id": "0758260611c59000",
     "attributes": {
-     "name": "Open/Close Proportion",
+     "name": "Minutes Open vs. Minutes Closed (discrete reading)",
      "properties": {
       "shape": "chronograf-v2",
       "type": "histogram",
       "queries": [
        {
-        "text": "from(bucket: \"Door_Data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"door_status\")\n  |> filter(fn: (r) => r[\"_field\"] == \"open\")\n  |> filter(fn: (r) => r[\"device\"] == \"device_name\")\n  |> aggregateWindow(every: 1s, fn: last, createEmpty: false)\n  |> yield(name: \"last\")",
+        "text": "from(bucket: \"Door_Data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"door_status\")\n  |> filter(fn: (r) => r[\"_field\"] == \"open\")\n  |> filter(fn: (r) => r[\"device\"] == \"device_name\")\n  |> aggregateWindow(every: 60s, fn: max, createEmpty: true)\n  |> yield(name: \"max\")",
         "editMode": "advanced",
         "name": "",
         "builderConfig": {
@@ -477,7 +479,7 @@
        "_measurement",
        "device"
       ],
-      "xAxisLabel": "Closed                                                                                              Open",
+      "xAxisLabel": "Closed                               Open",
       "position": "stacked",
       "binCount": 2,
       "note": "",
@@ -492,13 +494,13 @@
     "type": "view",
     "id": "07582b67b6c59000",
     "attributes": {
-     "name": "Max Opening Angle",
+     "name": "Histogram: Max Opening Angles",
      "properties": {
       "shape": "chronograf-v2",
       "type": "histogram",
       "queries": [
        {
-        "text": "from(bucket: \"Door_Data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"door_status\")\n  |> filter(fn: (r) => r[\"_field\"] == \"max_opening_angle\")\n  |> filter(fn: (r) => r[\"device\"] == \"device_name\")\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"mean\")",
+        "text": "from(bucket: \"Door_Data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"door_status\")\n  |> filter(fn: (r) => r[\"_field\"] == \"max_opening_angle\")\n  |> filter(fn: (r) => r[\"device\"] == \"device_name\")\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\n  |> yield(name: \"last\")",
         "editMode": "advanced",
         "name": "",
         "builderConfig": {
@@ -524,21 +526,21 @@
       ],
       "colors": [
        {
-        "id": "d06eec86-7b27-44a1-bcec-4ea1ea494d3b",
+        "id": "f42d9d4b-c5c9-4be5-aa9b-c008790a6307",
         "type": "scale",
         "hex": "#31C0F6",
         "name": "Nineteen Eighty Four",
         "value": 0
        },
        {
-        "id": "b9c1940a-d8c4-49e2-9f6a-743ef5bb0a2b",
+        "id": "319c0072-bc9f-4fe5-a974-0972023a6c78",
         "type": "scale",
         "hex": "#A500A5",
         "name": "Nineteen Eighty Four",
         "value": 0
        },
        {
-        "id": "0ef66f19-7b71-4a19-b766-e8699f46ec9b",
+        "id": "530f39da-0025-475e-bfbd-0bfdbd5f7803",
         "type": "scale",
         "hex": "#FF7E27",
         "name": "Nineteen Eighty Four",
@@ -553,9 +555,9 @@
        "_measurement",
        "device"
       ],
-      "xAxisLabel": "",
+      "xAxisLabel": "Maximum Opening Angle (of individual opening events)",
       "position": "stacked",
-      "binCount": 0,
+      "binCount": 30,
       "note": "",
       "showNoteWhenEmpty": false,
       "legendColorizeRows": true,
@@ -568,13 +570,13 @@
     "type": "view",
     "id": "07582f0c381e6000",
     "attributes": {
-     "name": "Average Opening Angle",
+     "name": "Histogram: Average Opening Angles",
      "properties": {
       "shape": "chronograf-v2",
       "type": "histogram",
       "queries": [
        {
-        "text": "from(bucket: \"Door_Data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"door_status\")\n  |> filter(fn: (r) => r[\"_field\"] == \"avg_opening_angle\")\n  |> filter(fn: (r) => r[\"device\"] == \"device_name\")\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\n  |> yield(name: \"last\")\n\nfrom(bucket: \"Door_Data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"door_status\")\n  |> filter(fn: (r) => r[\"_field\"] == \"avg_opening_angle\")\n  |> filter(fn: (r) => r[\"device\"] == \"device_name\")\n  |> count()\n  |> yield(name: \"count\")",
+        "text": "from(bucket: \"Door_Data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"door_status\")\n  |> filter(fn: (r) => r[\"_field\"] == \"avg_opening_angle\")\n  |> filter(fn: (r) => r[\"device\"] == \"device_name\")\n  |> aggregateWindow(every: 1s, fn: last, createEmpty: false)\n  |> yield(name: \"last\")",
         "editMode": "advanced",
         "name": "",
         "builderConfig": {
@@ -623,13 +625,13 @@
       ],
       "xColumn": "_value",
       "fillColumns": [
+       "_measurement",
        "_start",
        "_stop",
        "_field",
-       "_measurement",
        "device"
       ],
-      "xAxisLabel": "",
+      "xAxisLabel": "Average Opening Angle (of individual opening events)",
       "position": "stacked",
       "binCount": 0,
       "note": "",
@@ -644,7 +646,7 @@
     "type": "view",
     "id": "07582f824a459000",
     "attributes": {
-     "name": "Door Opening Times",
+     "name": "Histogram: Door Opening Times",
      "properties": {
       "shape": "chronograf-v2",
       "type": "histogram",
@@ -705,7 +707,7 @@
        "_measurement",
        "device"
       ],
-      "xAxisLabel": "Opening Time (sseconds)",
+      "xAxisLabel": "Time Open (seconds)",
       "position": "stacked",
       "binCount": 0,
       "note": "",
@@ -783,13 +785,13 @@
     "type": "view",
     "id": "0758307a3a1e6000",
     "attributes": {
-     "name": "Opening in Time Period",
+     "name": "Number of Door Openings in Time Interval",
      "properties": {
       "shape": "chronograf-v2",
       "type": "single-stat",
       "queries": [
        {
-        "text": "from(bucket: \"Door_Data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"door_status\")\n  |> filter(fn: (r) => r[\"_field\"] == \"opening_time\")\n  |> count()\n  |> yield(name: \"count\")",
+        "text": "from(bucket: \"Door_Data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"door_status\")\n  |> filter(fn: (r) => r[\"_field\"] == \"avg_opening_angle\")\n  |> filter(fn: (r) => r[\"device\"] == \"device_name\")\n  |> count()\n  |> yield(name: \"count\")",
         "editMode": "advanced",
         "name": "",
         "builderConfig": {
