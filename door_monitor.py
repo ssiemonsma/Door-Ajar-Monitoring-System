@@ -323,13 +323,14 @@ def update_open_status(pin):
 		send_angle_update(0)	# When door is closed, angle is assumed to be 0 degrees
 
 		# Send statistics for the opening event
-		totalTimeOpen = datetime.utcnow().timestamp() - openingTime
-		line = get_formatted_line(sensor_name, 'opening_time', totalTimeOpen)
-		send_line(line)
-		line = get_formatted_line(sensor_name, 'avg_opening_angle', openingTotalAngle/totalTimeOpen*OPENING_UPDATE_INTERVAL)
-		send_line(line)
-		line = get_formatted_line(sensor_name, 'max_opening_angle', openingMaxAngle)
-		send_line(line)
+		if openingTotalAngle > 0:  # Prevent the initialization run from sending an opening event
+			totalTimeOpen = datetime.utcnow().timestamp() - openingTime
+			line = get_formatted_line(sensor_name, 'opening_time', totalTimeOpen)
+			send_line(line)
+			line = get_formatted_line(sensor_name, 'avg_opening_angle', openingTotalAngle/totalTimeOpen*OPENING_UPDATE_INTERVAL)
+			send_line(line)
+			line = get_formatted_line(sensor_name, 'max_opening_angle', openingMaxAngle)
+			send_line(line)
 
 		# Reset statistics for opening events
 		openingMaxAngle = 0
@@ -364,12 +365,12 @@ while True:
 			
 			drawAngle(angleCalibrated)	# Update door angle LEDs
 						
-			if angleCalibrated > openingMaxAngle:
-				openingMaxAngle = angleCalibrated
+			if max(0, min(angleCalibrated, angleMax)) > openingMaxAngle:
+				openingMaxAngle = max(0, min(angleCalibrated, angleMax))
 
 			if (datetime.utcnow().timestamp() - openingTimeAngleCollected) > OPENING_UPDATE_INTERVAL:
 				openingTimeAngleCollected = datetime.utcnow().timestamp()
-				openingTotalAngle += angleCalibrated
+				openingTotalAngle += max(0, min(angleCalibrated, angleMax))
 
 			# Send angle updates every 10 cycles
 			if counter >= 10:
